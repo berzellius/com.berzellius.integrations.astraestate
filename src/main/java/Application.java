@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by berz on 03.01.2017.
+ * Astraestate project
  */
 @Configuration
 @ComponentScan
