@@ -570,45 +570,6 @@ public class LeadFromSiteServiceImpl implements LeadsFromSiteService {
         return new Result("success");
     }
 
-    /**
-    public LeadFromSite processLeadFromSite(LeadFromSite leadFromSite) throws APIAuthException {
-        Assert.isTrue(leadFromSite.getLead() != null);
-        Lead lead = leadFromSite.getLead();
-        CleanLead cleanLead = lead.toCleanLead();
-
-        if(
-                cleanLead.getPhone() == null &&
-                        cleanLead.getEmail() == null
-                ){
-            leadFromSite.setState(LeadFromSite.State.DONE);
-            leadFromSiteRepository.save(leadFromSite);
-        }
-
-        String search = "";
-        if(cleanLead.getPhone() != null){
-            search = cleanLead.getPhone();
-        }
-
-        if(cleanLead.getEmail() != null){
-            search = (search.equals("") ? "" : " ").concat(cleanLead.getEmail());
-        }
-
-        log.info("searching by " . concat(search));
-
-        List<AmoCRMLead> crmLeads = amoCRMService.getLeadsByQuery(search);
-        if(crmLeads.size() > 0){
-            leadFromSite.setRetryCount(leadFromSite.getRetryCount() > 0 ? (leadFromSite.getRetryCount() - 1) : 0);
-            if(leadFromSite.getRetryCount() == 0){
-                leadFromSite.setState(LeadFromSite.State.DONE);
-            }
-
-            leadFromSiteRepository.save(leadFromSite);
-        }
-
-        return leadFromSite;
-    }
-     */
-
     public Long getLeadProcessedTagId() {
         return leadProcessedTagId;
     }

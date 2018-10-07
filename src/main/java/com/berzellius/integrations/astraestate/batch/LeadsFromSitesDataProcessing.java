@@ -37,84 +37,11 @@ public class LeadsFromSitesDataProcessing {
     @PersistenceContext
     EntityManager entityManager;
 
-    //@Autowired
-    //IncomingCallBusinessProcess incomingCallBusinessProcess;
-
     @Autowired
     JobBuilderFactory jobBuilderFactory;
 
     @Autowired
     LeadsFromSiteService leadsFromSiteService;
-
-
-    @Autowired
-    AmoCRMService amoCRMService;
-
-    /*
-    @Bean
-    public ItemReader<TrackedCall> callReader(){
-        JpaPagingItemReader<TrackedCall> reader = new JpaPagingItemReader<>();
-        reader.setEntityManagerFactory(entityManager.getEntityManagerFactory());
-        reader.setQueryString("select c from Call c where state = :st");
-        HashMap<String, Object> params = new LinkedHashMap<>();
-        params.put("st", TrackedCall.State.NEW);
-        reader.setParameterValues(params);
-
-        return reader;
-    }
-
-    @Bean
-    public ItemProcessor<TrackedCall, TrackedCall> callProcessor(){
-        return new ItemProcessor<TrackedCall, TrackedCall>() {
-            @Override
-            public TrackedCall process(TrackedCall call) throws Exception {
-                try{
-                    incomingCallBusinessProcess.newIncomingCall(call);
-                }
-                catch(RuntimeException e){
-                    System.out.println("exception while processing LeadFromSite");
-                    e.printStackTrace();
-                    throw e;
-                }
-
-                return call;
-            }
-        };
-    }
-
-    @Bean
-    public Step callAddToCRMStep(
-            StepBuilderFactory stepBuilderFactory,
-            ItemReader<TrackedCall> callItemReader,
-            ItemProcessor<TrackedCall, TrackedCall> callProcessor
-
-    ){
-        return stepBuilderFactory.get("callAddToCRMStep")
-                .<TrackedCall, TrackedCall>chunk(1)
-                .reader(callItemReader)
-                .processor(callProcessor)
-                .faultTolerant()
-                .skip(RuntimeException.class)
-                .skipLimit(2000)
-                .taskExecutor(taskExecutor())
-                .throttleLimit(1)
-                .build();
-    }
-
-    @Bean
-    public Job newCallsToCRMJob(
-        Step callAddToCRMStep
-    ){
-        RunIdIncrementer runIdIncrementer = new RunIdIncrementer();
-
-        return jobBuilderFactory.get("newCallsToCRMJob")
-                .incrementer(runIdIncrementer)
-                .flow(callAddToCRMStep)
-                .end()
-                .build();
-    }
-
-     */
 
     @Bean
     public ItemReader<LeadFromSite> cleanLeadItemReader(){
