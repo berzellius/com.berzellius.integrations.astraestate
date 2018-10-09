@@ -61,4 +61,6 @@ public interface LeadsFromSiteService {
     void setLeadProcessedTagId(Long leadProcessedTagId);
 
     void setLeadProcessedTagName(String leadProcessedTagName);
+
+    void setRoistatVisitLeadCustomField(Long roistatVisitLeadCustomField);
 }

@@ -96,6 +96,8 @@ public class LeadFromSiteServiceImpl implements LeadsFromSiteService {
     private Long leadProcessedTagId;
     private String leadProcessedTagName;
 
+    private Long roistatVisitLeadCustomField;
+
     private static final Logger log = LoggerFactory.getLogger(LeadsFromSiteService.class);
 
     private String transformPhone(String phone){
@@ -269,44 +271,61 @@ public class LeadFromSiteServiceImpl implements LeadsFromSiteService {
             Lead lead = leadFromSite.getLead();
             CleanLead cleanLead = lead.toCleanLead();
             String marketingChannel = this.getMarketingChannelByCleanLead(cleanLead);
+            Long roistatVisit = lead.getRoistat_visit();
 
-            if(marketingChannel != null){
-                // определили рекламный канал. нужно распространить на сделки, у которых не определен РК..
 
-                log.info("marketing channel = " + marketingChannel + " " + uuid.toString());
+            String search = "";
+            if(cleanLead.getPhone() != null){
+                search = cleanLead.getPhone();
+            }
 
-                String search = "";
-                if(cleanLead.getPhone() != null){
-                    search = cleanLead.getPhone();
-                }
+            if(cleanLead.getEmail() != null){
+                search = (search.equals("") ? "" : " ").concat(cleanLead.getEmail());
+            }
 
-                if(cleanLead.getEmail() != null){
-                    search = (search.equals("") ? "" : " ").concat(cleanLead.getEmail());
-                }
+            if(!search.equals("")) {
+                log.info("searching by " + search + " " + uuid.toString());
 
-                if(!search.equals("")) {
-                    log.info("searching by " + search + " " + uuid.toString());
+                List<AmoCRMLead> crmLeads = amoCRMService.getLeadsByQuery(search);
+                if (crmLeads.size() > 0) {
+                    for(AmoCRMLead crmLead : crmLeads){
+                        log.info("lead#" + crmLead.getId() + " " + uuid.toString());
 
-                    List<AmoCRMLead> crmLeads = amoCRMService.getLeadsByQuery(search);
-                    if (crmLeads.size() > 0) {
-                        for(AmoCRMLead crmLead : crmLeads){
-                            log.info("lead#" + crmLead.getId() + " " + uuid.toString());
+                        if(marketingChannel != null){
+                            // определили рекламный канал. нужно распространить на сделки, у которых не определен РК..
+
+                            log.info("marketing channel = " + marketingChannel + " " + uuid.toString());
 
                             if(crmLead.customFieldIsEmpty(this.getMarketingChannelLeadsCustomField())){
                                 log.info("update marketing channel for lead#" + crmLead.getId().toString() + " " + uuid.toString());
                                 String[] values = {marketingChannel};
                                 crmLead.addStringValuesToCustomField(this.getMarketingChannelLeadsCustomField(), values);
-                                amoCRMService.saveByUpdate(crmLead);
                             }
                             else{
                                 log.info("marketing channel is set for lead#" + crmLead.getId().toString() + " " + uuid.toString());
                             }
                         }
+                        else{
+                            log.warn("marketing channel NOT detected!");
+                        }
+
+                        if (roistatVisit != null) {
+                            // работаем с roistat visit
+
+                            log.info("roistat visit = " + marketingChannel + " " + uuid.toString());
+
+                            if(crmLead.customFieldIsEmpty(this.getRoistatVisitLeadCustomField())){
+                                log.info("update roistat visit for lead#" + crmLead.getId().toString() + " " + uuid.toString());
+                                crmLead.addStringValueToCustomField(this.getRoistatVisitLeadCustomField(), roistatVisit.toString());
+                            }
+                        }
+                        else{
+                            log.warn("roistat visit NOT detected");
+                        }
+
+                        amoCRMService.saveByUpdate(crmLead);
                     }
                 }
-            }
-            else{
-                log.warn("marketing channel NOT detected!");
             }
         }
 
@@ -586,5 +605,14 @@ public class LeadFromSiteServiceImpl implements LeadsFromSiteService {
     @Override
     public void setLeadProcessedTagName(String leadProcessedTagName) {
         this.leadProcessedTagName = leadProcessedTagName;
+    }
+
+    public Long getRoistatVisitLeadCustomField() {
+        return roistatVisitLeadCustomField;
+    }
+
+    @Override
+    public void setRoistatVisitLeadCustomField(Long roistatVisitLeadCustomField) {
+        this.roistatVisitLeadCustomField = roistatVisitLeadCustomField;
     }
 }

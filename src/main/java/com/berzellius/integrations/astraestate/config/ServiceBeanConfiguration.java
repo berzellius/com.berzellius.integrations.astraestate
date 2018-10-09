@@ -118,6 +118,7 @@ public class ServiceBeanConfiguration {
         leadsFromSiteService.setRefererCustomFieldThird(APISettings.AMOCRMLeadRefererFieldThird);
         leadsFromSiteService.setLeadProcessedTagId(APISettings.AmoCRMLeadProcessedTagId);
         leadsFromSiteService.setLeadProcessedTagName(APISettings.AmoCRMLeadProcessedTagName);
+        leadsFromSiteService.setRoistatVisitLeadCustomField(APISettings.AMOCRMLeadRoistatVisit);
         leadsFromSiteService.setAddtFieldsJoin(APISettings.AMOCRMAddtFieldsJoin());
         return leadsFromSiteService;
     }

@@ -16,7 +16,7 @@ public class CallsRecordsScheduling {
     @Autowired
     SchedulingService schedulingService;
 
-    @Scheduled(fixedDelay = 3600000)
+    //@Scheduled(fixedDelay = 3600000)
     public void runRecordsBatch() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         schedulingService.runProcessingCallRecords();
     }

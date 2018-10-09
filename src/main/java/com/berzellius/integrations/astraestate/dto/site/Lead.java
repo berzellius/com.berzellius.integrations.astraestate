@@ -89,6 +89,11 @@ public class Lead implements Serializable {
     private String utm_campaign;
     private String utm_term;
 
+    /**
+     * roistat_visit
+     */
+    private Long roistat_visit;
+
     public String getName() {
         return name;
     }
@@ -255,5 +260,13 @@ public class Lead implements Serializable {
 
     public void setTelefon(String telefon) {
         Telefon = telefon;
+    }
+
+    public Long getRoistat_visit() {
+        return roistat_visit;
+    }
+
+    public void setRoistat_visit(Long roistat_visit) {
+        this.roistat_visit = roistat_visit;
     }
 }

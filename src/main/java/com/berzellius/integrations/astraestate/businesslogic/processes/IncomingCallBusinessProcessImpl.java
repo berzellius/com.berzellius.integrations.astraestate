@@ -454,6 +454,7 @@ public class IncomingCallBusinessProcessImpl implements IncomingCallBusinessProc
         String[] numberField = {number};
         amoCRMLead.addStringValuesToCustomField(this.getPhoneNumberCustomFieldLeads(), numberField);
         String[] sourceField = {call.getSource()};
+        log.info("add " + call.getSource() + " to custom field#" + this.getMarketingChannelLeadsCustomField());
         amoCRMLead.addStringValuesToCustomField(this.getMarketingChannelLeadsCustomField(), sourceField);
 
         if(
